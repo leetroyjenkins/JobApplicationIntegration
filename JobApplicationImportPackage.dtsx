@@ -1,0 +1,864 @@
+﻿<?xml version="1.0"?>
+<DTS:Executable xmlns:DTS="www.microsoft.com/SqlServer/Dts"
+  DTS:refId="Package"
+  DTS:CreationDate="3/1/2022 9:23:15 AM"
+  DTS:CreationName="Microsoft.Package"
+  DTS:CreatorComputerName="LAPTOP-KJGENM5N"
+  DTS:CreatorName="LAPTOP-KJGENM5N\Home"
+  DTS:DTSID="{ABFAAAEC-5DF0-409C-B3C1-F9E60C32E639}"
+  DTS:ExecutableType="Microsoft.Package"
+  DTS:LastModifiedProductVersion="15.0.2000.180"
+  DTS:LocaleID="1033"
+  DTS:ObjectName="Package"
+  DTS:PackageType="5"
+  DTS:VersionBuild="14"
+  DTS:VersionGUID="{FE585147-F624-42CB-9902-9F94AB0B3E1B}">
+  <DTS:Property
+    DTS:Name="PackageFormatVersion">8</DTS:Property>
+  <DTS:ConnectionManagers>
+    <DTS:ConnectionManager
+      DTS:refId="Package.ConnectionManagers[Excel Connection Manager]"
+      DTS:CreationName="EXCEL"
+      DTS:DTSID="{9B8E4B33-DD73-40AC-8509-3C3471DB46CB}"
+      DTS:ObjectName="Excel Connection Manager">
+      <DTS:ObjectData>
+        <DTS:ConnectionManager
+          DTS:ConnectRetryCount="0"
+          DTS:ConnectRetryInterval="0"
+          DTS:ConnectionString="Provider=Microsoft.ACE.OLEDB.16.0;Data Source=C:\Users\Home\OneDrive\SQL\JobApplicationDatabase\JobAppliedTo.xlsm;Extended Properties=&quot;EXCEL 12.0 MACRO;HDR=YES&quot;;" />
+      </DTS:ObjectData>
+    </DTS:ConnectionManager>
+    <DTS:ConnectionManager
+      DTS:refId="Package.ConnectionManagers[localhost.JobApplication]"
+      DTS:CreationName="OLEDB"
+      DTS:DTSID="{F3C59A58-1AB2-4E2D-A6B2-1A4A1E33716E}"
+      DTS:ObjectName="localhost.JobApplication">
+      <DTS:ObjectData>
+        <DTS:ConnectionManager
+          DTS:ConnectRetryCount="1"
+          DTS:ConnectRetryInterval="5"
+          DTS:ConnectionString="Data Source=localhost;Initial Catalog=JobApplication;Provider=SQLNCLI11.1;Integrated Security=SSPI;Auto Translate=False;" />
+      </DTS:ObjectData>
+    </DTS:ConnectionManager>
+  </DTS:ConnectionManagers>
+  <DTS:Variables />
+  <DTS:Executables>
+    <DTS:Executable
+      DTS:refId="Package\Build Staging Table"
+      DTS:CreationName="Microsoft.ExecuteSQLTask"
+      DTS:Description="Build Application Staging Table in SQL Server"
+      DTS:DTSID="{2B1B08DA-B23E-4FCE-849A-5027B5EDF618}"
+      DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Build Staging Table"
+      DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2019; © 2019 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+      DTS:ThreadHint="0">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <SQLTask:SqlTaskData
+          SQLTask:Connection="{F3C59A58-1AB2-4E2D-A6B2-1A4A1E33716E}"
+          SQLTask:BypassPrepare="False"
+          SQLTask:SqlStatementSource="IF OBJECT_ID('StagingApplications', 'U') IS NOT NULL&#xA;&#x9;DROP TABLE StagingApplications;&#xA;&#xA;CREATE TABLE StagingApplications(staging_id INT IDENTITY(1,1)&#xA;&#x9;&#x9;&#x9;&#x9;, company NVARCHAR(255)&#xA;&#x9;&#x9;&#x9;&#x9;, [Source] NVARCHAR(255)&#xA;&#x9;&#x9;&#x9;&#x9;, date_applied DATETIME&#xA;&#x9;&#x9;&#x9;&#x9;, latest_step NVARCHAR(255)&#xA;&#x9;&#x9;&#x9;&#x9;, [Status] NVARCHAR(255)&#xA;&#x9;&#x9;&#x9;&#x9;, [status_date] DATETIME&#xA;&#x9;&#x9;&#x9;&#x9;, req_id NVARCHAR(255)&#xA;&#x9;&#x9;&#x9;&#x9;, job_title NVARCHAR(255)&#xA;&#x9;&#x9;&#x9;&#x9;, [location] NVARCHAR(255)&#xA;&#x9;&#x9;&#x9;&#x9;, [remote] NVARCHAR(255)&#xA;&#x9;&#x9;&#x9;&#x9;, applicant_name NVARCHAR(255)&#xA;&#x9;&#x9;&#x9;&#x9;);" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\Import from Excel to SQL Server"
+      DTS:CreationName="Microsoft.Pipeline"
+      DTS:Description="Data Flow Task"
+      DTS:DTSID="{07CA7997-4EE6-45C4-B896-CD1AAF73C99F}"
+      DTS:ExecutableType="Microsoft.Pipeline"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Import from Excel to SQL Server"
+      DTS:TaskContact="Performs high-performance data extraction, transformation and loading;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <pipeline
+          version="1">
+          <components>
+            <component
+              refId="Package\Import from Excel to SQL Server\Data Conversion"
+              componentClassID="Microsoft.DataConvert"
+              contactInfo="Data Conversion;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;0"
+              description="Data Conversion"
+              name="Data Conversion"
+              usesDispositions="true">
+              <inputs>
+                <input
+                  refId="Package\Import from Excel to SQL Server\Data Conversion.Inputs[Data Conversion Input]"
+                  name="Data Conversion Input">
+                  <inputColumns>
+                    <inputColumn
+                      refId="Package\Import from Excel to SQL Server\Data Conversion.Inputs[Data Conversion Input].Columns[Date Applied]"
+                      cachedDataType="date"
+                      cachedName="Date Applied"
+                      lineageId="Package\Import from Excel to SQL Server\Excel Source.Outputs[Excel Source Output].Columns[Date Applied]" />
+                    <inputColumn
+                      refId="Package\Import from Excel to SQL Server\Data Conversion.Inputs[Data Conversion Input].Columns[Status Date]"
+                      cachedDataType="date"
+                      cachedName="Status Date"
+                      lineageId="Package\Import from Excel to SQL Server\Excel Source.Outputs[Excel Source Output].Columns[Status Date]" />
+                  </inputColumns>
+                  <externalMetadataColumns />
+                </input>
+              </inputs>
+              <outputs>
+                <output
+                  refId="Package\Import from Excel to SQL Server\Data Conversion.Outputs[Data Conversion Output]"
+                  exclusionGroup="1"
+                  name="Data Conversion Output"
+                  synchronousInputId="Package\Import from Excel to SQL Server\Data Conversion.Inputs[Data Conversion Input]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Import from Excel to SQL Server\Data Conversion.Outputs[Data Conversion Output].Columns[Copy of Date Applied]"
+                      dataType="dbTimeStamp"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      lineageId="Package\Import from Excel to SQL Server\Data Conversion.Outputs[Data Conversion Output].Columns[Copy of Date Applied]"
+                      name="Copy of Date Applied"
+                      truncationRowDisposition="FailComponent">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.Int32"
+                          description="Specifies the input column used as the source of data for the conversion."
+                          name="SourceInputColumnLineageID">#{Package\Import from Excel to SQL Server\Excel Source.Outputs[Excel Source Output].Columns[Date Applied]}</property>
+                        <property
+                          dataType="System.Boolean"
+                          description="Indicates whether the column uses the faster, locale-neutral parsing routines."
+                          name="FastParse">false</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn
+                      refId="Package\Import from Excel to SQL Server\Data Conversion.Outputs[Data Conversion Output].Columns[Copy of Status Date]"
+                      dataType="dbTimeStamp"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      lineageId="Package\Import from Excel to SQL Server\Data Conversion.Outputs[Data Conversion Output].Columns[Copy of Status Date]"
+                      name="Copy of Status Date"
+                      truncationRowDisposition="FailComponent">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.Int32"
+                          description="Specifies the input column used as the source of data for the conversion."
+                          name="SourceInputColumnLineageID">#{Package\Import from Excel to SQL Server\Excel Source.Outputs[Excel Source Output].Columns[Status Date]}</property>
+                        <property
+                          dataType="System.Boolean"
+                          description="Indicates whether the column uses the faster, locale-neutral parsing routines."
+                          name="FastParse">false</property>
+                      </properties>
+                    </outputColumn>
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+                <output
+                  refId="Package\Import from Excel to SQL Server\Data Conversion.Outputs[Data Conversion Error Output]"
+                  exclusionGroup="1"
+                  isErrorOut="true"
+                  name="Data Conversion Error Output"
+                  synchronousInputId="Package\Import from Excel to SQL Server\Data Conversion.Inputs[Data Conversion Input]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Import from Excel to SQL Server\Data Conversion.Outputs[Data Conversion Error Output].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\Import from Excel to SQL Server\Data Conversion.Outputs[Data Conversion Error Output].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\Import from Excel to SQL Server\Data Conversion.Outputs[Data Conversion Error Output].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\Import from Excel to SQL Server\Data Conversion.Outputs[Data Conversion Error Output].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            <component
+              refId="Package\Import from Excel to SQL Server\Excel Source"
+              componentClassID="Microsoft.ExcelSource"
+              contactInfo="Excel Source;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;1"
+              description="Excel Source"
+              name="Excel Source"
+              usesDispositions="true"
+              version="1">
+              <properties>
+                <property
+                  dataType="System.Int32"
+                  description="The number of seconds before a command times out.  A value of 0 indicates an infinite time-out."
+                  name="CommandTimeout">0</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the name of the database object used to open a rowset."
+                  name="OpenRowset">Applications$</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the variable that contains the name of the database object used to open a rowset."
+                  name="OpenRowsetVariable"></property>
+                <property
+                  dataType="System.String"
+                  description="The SQL command to be executed."
+                  name="SqlCommand"
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor"></property>
+                <property
+                  dataType="System.String"
+                  description="The variable that contains the SQL command to be executed."
+                  name="SqlCommandVariable"></property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the mode used to access the database."
+                  name="AccessMode"
+                  typeConverter="AccessMode">0</property>
+                <property
+                  dataType="System.String"
+                  description="The mapping from parameters in the SQL command to variables."
+                  name="ParameterMapping"></property>
+              </properties>
+              <connections>
+                <connection
+                  refId="Package\Import from Excel to SQL Server\Excel Source.Connections[OleDbConnection]"
+                  connectionManagerID="Package.ConnectionManagers[Excel Connection Manager]"
+                  connectionManagerRefId="Package.ConnectionManagers[Excel Connection Manager]"
+                  description="The OLE DB runtime connection used to access the database."
+                  name="OleDbConnection" />
+              </connections>
+              <outputs>
+                <output
+                  refId="Package\Import from Excel to SQL Server\Excel Source.Outputs[Excel Source Output]"
+                  name="Excel Source Output">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Import from Excel to SQL Server\Excel Source.Outputs[Excel Source Output].Columns[Company ]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Import from Excel to SQL Server\Excel Source.Outputs[Excel Source Output].ExternalColumns[Company ]"
+                      length="255"
+                      lineageId="Package\Import from Excel to SQL Server\Excel Source.Outputs[Excel Source Output].Columns[Company ]"
+                      name="Company "
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Import from Excel to SQL Server\Excel Source.Outputs[Excel Source Output].Columns[Source]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Import from Excel to SQL Server\Excel Source.Outputs[Excel Source Output].ExternalColumns[Source]"
+                      length="255"
+                      lineageId="Package\Import from Excel to SQL Server\Excel Source.Outputs[Excel Source Output].Columns[Source]"
+                      name="Source"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Import from Excel to SQL Server\Excel Source.Outputs[Excel Source Output].Columns[Date Applied]"
+                      dataType="date"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Import from Excel to SQL Server\Excel Source.Outputs[Excel Source Output].ExternalColumns[Date Applied]"
+                      lineageId="Package\Import from Excel to SQL Server\Excel Source.Outputs[Excel Source Output].Columns[Date Applied]"
+                      name="Date Applied"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Import from Excel to SQL Server\Excel Source.Outputs[Excel Source Output].Columns[Latest Step]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Import from Excel to SQL Server\Excel Source.Outputs[Excel Source Output].ExternalColumns[Latest Step]"
+                      length="255"
+                      lineageId="Package\Import from Excel to SQL Server\Excel Source.Outputs[Excel Source Output].Columns[Latest Step]"
+                      name="Latest Step"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Import from Excel to SQL Server\Excel Source.Outputs[Excel Source Output].Columns[Status]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Import from Excel to SQL Server\Excel Source.Outputs[Excel Source Output].ExternalColumns[Status]"
+                      length="255"
+                      lineageId="Package\Import from Excel to SQL Server\Excel Source.Outputs[Excel Source Output].Columns[Status]"
+                      name="Status"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Import from Excel to SQL Server\Excel Source.Outputs[Excel Source Output].Columns[Status Date]"
+                      dataType="date"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Import from Excel to SQL Server\Excel Source.Outputs[Excel Source Output].ExternalColumns[Status Date]"
+                      lineageId="Package\Import from Excel to SQL Server\Excel Source.Outputs[Excel Source Output].Columns[Status Date]"
+                      name="Status Date"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Import from Excel to SQL Server\Excel Source.Outputs[Excel Source Output].Columns[Job ID]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Import from Excel to SQL Server\Excel Source.Outputs[Excel Source Output].ExternalColumns[Job ID]"
+                      length="255"
+                      lineageId="Package\Import from Excel to SQL Server\Excel Source.Outputs[Excel Source Output].Columns[Job ID]"
+                      name="Job ID"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Import from Excel to SQL Server\Excel Source.Outputs[Excel Source Output].Columns[Job]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Import from Excel to SQL Server\Excel Source.Outputs[Excel Source Output].ExternalColumns[Job]"
+                      length="255"
+                      lineageId="Package\Import from Excel to SQL Server\Excel Source.Outputs[Excel Source Output].Columns[Job]"
+                      name="Job"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Import from Excel to SQL Server\Excel Source.Outputs[Excel Source Output].Columns[Location]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Import from Excel to SQL Server\Excel Source.Outputs[Excel Source Output].ExternalColumns[Location]"
+                      length="255"
+                      lineageId="Package\Import from Excel to SQL Server\Excel Source.Outputs[Excel Source Output].Columns[Location]"
+                      name="Location"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Import from Excel to SQL Server\Excel Source.Outputs[Excel Source Output].Columns[Remote]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Import from Excel to SQL Server\Excel Source.Outputs[Excel Source Output].ExternalColumns[Remote]"
+                      length="255"
+                      lineageId="Package\Import from Excel to SQL Server\Excel Source.Outputs[Excel Source Output].Columns[Remote]"
+                      name="Remote"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Import from Excel to SQL Server\Excel Source.Outputs[Excel Source Output].Columns[Applicant]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Import from Excel to SQL Server\Excel Source.Outputs[Excel Source Output].ExternalColumns[Applicant]"
+                      length="255"
+                      lineageId="Package\Import from Excel to SQL Server\Excel Source.Outputs[Excel Source Output].Columns[Applicant]"
+                      name="Applicant"
+                      truncationRowDisposition="FailComponent" />
+                  </outputColumns>
+                  <externalMetadataColumns
+                    isUsed="True">
+                    <externalMetadataColumn
+                      refId="Package\Import from Excel to SQL Server\Excel Source.Outputs[Excel Source Output].ExternalColumns[Company ]"
+                      dataType="wstr"
+                      length="255"
+                      name="Company " />
+                    <externalMetadataColumn
+                      refId="Package\Import from Excel to SQL Server\Excel Source.Outputs[Excel Source Output].ExternalColumns[Source]"
+                      dataType="wstr"
+                      length="255"
+                      name="Source" />
+                    <externalMetadataColumn
+                      refId="Package\Import from Excel to SQL Server\Excel Source.Outputs[Excel Source Output].ExternalColumns[Date Applied]"
+                      dataType="date"
+                      name="Date Applied" />
+                    <externalMetadataColumn
+                      refId="Package\Import from Excel to SQL Server\Excel Source.Outputs[Excel Source Output].ExternalColumns[Latest Step]"
+                      dataType="wstr"
+                      length="255"
+                      name="Latest Step" />
+                    <externalMetadataColumn
+                      refId="Package\Import from Excel to SQL Server\Excel Source.Outputs[Excel Source Output].ExternalColumns[Status]"
+                      dataType="wstr"
+                      length="255"
+                      name="Status" />
+                    <externalMetadataColumn
+                      refId="Package\Import from Excel to SQL Server\Excel Source.Outputs[Excel Source Output].ExternalColumns[Status Date]"
+                      dataType="date"
+                      name="Status Date" />
+                    <externalMetadataColumn
+                      refId="Package\Import from Excel to SQL Server\Excel Source.Outputs[Excel Source Output].ExternalColumns[Job ID]"
+                      dataType="wstr"
+                      length="255"
+                      name="Job ID" />
+                    <externalMetadataColumn
+                      refId="Package\Import from Excel to SQL Server\Excel Source.Outputs[Excel Source Output].ExternalColumns[Job]"
+                      dataType="wstr"
+                      length="255"
+                      name="Job" />
+                    <externalMetadataColumn
+                      refId="Package\Import from Excel to SQL Server\Excel Source.Outputs[Excel Source Output].ExternalColumns[Location]"
+                      dataType="wstr"
+                      length="255"
+                      name="Location" />
+                    <externalMetadataColumn
+                      refId="Package\Import from Excel to SQL Server\Excel Source.Outputs[Excel Source Output].ExternalColumns[Remote]"
+                      dataType="wstr"
+                      length="255"
+                      name="Remote" />
+                    <externalMetadataColumn
+                      refId="Package\Import from Excel to SQL Server\Excel Source.Outputs[Excel Source Output].ExternalColumns[Applicant]"
+                      dataType="wstr"
+                      length="255"
+                      name="Applicant" />
+                  </externalMetadataColumns>
+                </output>
+                <output
+                  refId="Package\Import from Excel to SQL Server\Excel Source.Outputs[Excel Source Error Output]"
+                  isErrorOut="true"
+                  name="Excel Source Error Output">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Import from Excel to SQL Server\Excel Source.Outputs[Excel Source Error Output].Columns[Company ]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\Import from Excel to SQL Server\Excel Source.Outputs[Excel Source Error Output].Columns[Company ]"
+                      name="Company " />
+                    <outputColumn
+                      refId="Package\Import from Excel to SQL Server\Excel Source.Outputs[Excel Source Error Output].Columns[Source]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\Import from Excel to SQL Server\Excel Source.Outputs[Excel Source Error Output].Columns[Source]"
+                      name="Source" />
+                    <outputColumn
+                      refId="Package\Import from Excel to SQL Server\Excel Source.Outputs[Excel Source Error Output].Columns[Date Applied]"
+                      dataType="date"
+                      lineageId="Package\Import from Excel to SQL Server\Excel Source.Outputs[Excel Source Error Output].Columns[Date Applied]"
+                      name="Date Applied" />
+                    <outputColumn
+                      refId="Package\Import from Excel to SQL Server\Excel Source.Outputs[Excel Source Error Output].Columns[Latest Step]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\Import from Excel to SQL Server\Excel Source.Outputs[Excel Source Error Output].Columns[Latest Step]"
+                      name="Latest Step" />
+                    <outputColumn
+                      refId="Package\Import from Excel to SQL Server\Excel Source.Outputs[Excel Source Error Output].Columns[Status]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\Import from Excel to SQL Server\Excel Source.Outputs[Excel Source Error Output].Columns[Status]"
+                      name="Status" />
+                    <outputColumn
+                      refId="Package\Import from Excel to SQL Server\Excel Source.Outputs[Excel Source Error Output].Columns[Status Date]"
+                      dataType="date"
+                      lineageId="Package\Import from Excel to SQL Server\Excel Source.Outputs[Excel Source Error Output].Columns[Status Date]"
+                      name="Status Date" />
+                    <outputColumn
+                      refId="Package\Import from Excel to SQL Server\Excel Source.Outputs[Excel Source Error Output].Columns[Job ID]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\Import from Excel to SQL Server\Excel Source.Outputs[Excel Source Error Output].Columns[Job ID]"
+                      name="Job ID" />
+                    <outputColumn
+                      refId="Package\Import from Excel to SQL Server\Excel Source.Outputs[Excel Source Error Output].Columns[Job]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\Import from Excel to SQL Server\Excel Source.Outputs[Excel Source Error Output].Columns[Job]"
+                      name="Job" />
+                    <outputColumn
+                      refId="Package\Import from Excel to SQL Server\Excel Source.Outputs[Excel Source Error Output].Columns[Location]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\Import from Excel to SQL Server\Excel Source.Outputs[Excel Source Error Output].Columns[Location]"
+                      name="Location" />
+                    <outputColumn
+                      refId="Package\Import from Excel to SQL Server\Excel Source.Outputs[Excel Source Error Output].Columns[Remote]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\Import from Excel to SQL Server\Excel Source.Outputs[Excel Source Error Output].Columns[Remote]"
+                      name="Remote" />
+                    <outputColumn
+                      refId="Package\Import from Excel to SQL Server\Excel Source.Outputs[Excel Source Error Output].Columns[Applicant]"
+                      dataType="wstr"
+                      length="255"
+                      lineageId="Package\Import from Excel to SQL Server\Excel Source.Outputs[Excel Source Error Output].Columns[Applicant]"
+                      name="Applicant" />
+                    <outputColumn
+                      refId="Package\Import from Excel to SQL Server\Excel Source.Outputs[Excel Source Error Output].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\Import from Excel to SQL Server\Excel Source.Outputs[Excel Source Error Output].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\Import from Excel to SQL Server\Excel Source.Outputs[Excel Source Error Output].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\Import from Excel to SQL Server\Excel Source.Outputs[Excel Source Error Output].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            <component
+              refId="Package\Import from Excel to SQL Server\SQL Server Destination"
+              componentClassID="Microsoft.SQLServerDestination"
+              contactInfo="SQL Server Destination;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;5"
+              description="SQL Server Destination"
+              name="SQL Server Destination"
+              version="5">
+              <properties>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the column code page to use when code page information is unavailable from the data source."
+                  name="DefaultCodePage">1252</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Forces the use of the DefaultCodePage property value when describing character data."
+                  name="AlwaysUseDefaultCodePage">false</property>
+                <property
+                  dataType="System.String"
+                  description="The name of the database object to copy data into."
+                  expressionType="Notify"
+                  name="BulkInsertTableName">[dbo].[StagingApplications]</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Specifies that any constraints on the destination object are checked during the data copy operation. Corresponds to the bulk insert CHECK_CONSTRAINTS option."
+                  name="BulkInsertCheckConstraints">true</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the number of the first row to copy. Corresponds to the bulk insert FIRSTROW option."
+                  expressionType="Notify"
+                  name="BulkInsertFirstRow">-1</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Specifies that any insert triggers defined on the destination object will execute during the data copy. Corresponds to the bulk insert FIRE_TRIGGERS option."
+                  name="BulkInsertFireTriggers">false</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Indicates whether the values supplied for identity columns will be copied to the destination. If false, values for identity columns will be auto-generated at the destination. Corresponds to the bulk insert KEEPIDENTITY option."
+                  name="BulkInsertKeepIdentity">false</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Indicates whether the columns containing null will have null copied to the destination. If false, columns containing null will have their default values inserted at the destination. Applies only if fast load is turned on."
+                  name="BulkInsertKeepNulls">false</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the number of the last row to copy. Corresponds to the bulk insert LASTROW option."
+                  expressionType="Notify"
+                  name="BulkInsertLastRow">-1</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the maximum number of syntax errors and compilation errors that can occur before the data copy operation is canceled. Each row that cannot be copied is ignored and counted as one error. Corresponds to the bulk insert MAXERRORS option."
+                  name="BulkInsertMaxErrors">-1</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies how the data to be copied is sorted. Corresponds to the bulk insert ORDER option."
+                  expressionType="Notify"
+                  name="BulkInsertOrder"></property>
+                <property
+                  dataType="System.Boolean"
+                  description="Specifies that a table-level lock is acquired for the duration of the data copy operation. Corresponds to the bulk insert TABLOCK option."
+                  name="BulkInsertTablock">true</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies in seconds the amount of time the SQL Destination adapter will wait before terminating if there is no data available for insertion.  A timeout value of 0 means the SQL Destination adapter will not time out."
+                  expressionType="Notify"
+                  name="Timeout">30</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies when commits are issued during data insertion.  A value of 0 specifies that one commit will be issued at the end of data insertion."
+                  name="MaxInsertCommitSize">0</property>
+              </properties>
+              <connections>
+                <connection
+                  refId="Package\Import from Excel to SQL Server\SQL Server Destination.Connections[OleDbConnection]"
+                  connectionManagerID="Package.ConnectionManagers[localhost.JobApplication]"
+                  connectionManagerRefId="Package.ConnectionManagers[localhost.JobApplication]"
+                  description="The OLE DB runtime connection used to access the database."
+                  name="OleDbConnection" />
+              </connections>
+              <inputs>
+                <input
+                  refId="Package\Import from Excel to SQL Server\SQL Server Destination.Inputs[SQL Server Destination Input]"
+                  hasSideEffects="true"
+                  name="SQL Server Destination Input">
+                  <inputColumns>
+                    <inputColumn
+                      refId="Package\Import from Excel to SQL Server\SQL Server Destination.Inputs[SQL Server Destination Input].Columns[Source]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="Source"
+                      externalMetadataColumnId="Package\Import from Excel to SQL Server\SQL Server Destination.Inputs[SQL Server Destination Input].ExternalColumns[Source]"
+                      lineageId="Package\Import from Excel to SQL Server\Excel Source.Outputs[Excel Source Output].Columns[Source]" />
+                    <inputColumn
+                      refId="Package\Import from Excel to SQL Server\SQL Server Destination.Inputs[SQL Server Destination Input].Columns[Latest Step]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="Latest Step"
+                      externalMetadataColumnId="Package\Import from Excel to SQL Server\SQL Server Destination.Inputs[SQL Server Destination Input].ExternalColumns[latest_step]"
+                      lineageId="Package\Import from Excel to SQL Server\Excel Source.Outputs[Excel Source Output].Columns[Latest Step]" />
+                    <inputColumn
+                      refId="Package\Import from Excel to SQL Server\SQL Server Destination.Inputs[SQL Server Destination Input].Columns[Status]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="Status"
+                      externalMetadataColumnId="Package\Import from Excel to SQL Server\SQL Server Destination.Inputs[SQL Server Destination Input].ExternalColumns[Status]"
+                      lineageId="Package\Import from Excel to SQL Server\Excel Source.Outputs[Excel Source Output].Columns[Status]" />
+                    <inputColumn
+                      refId="Package\Import from Excel to SQL Server\SQL Server Destination.Inputs[SQL Server Destination Input].Columns[Job ID]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="Job ID"
+                      externalMetadataColumnId="Package\Import from Excel to SQL Server\SQL Server Destination.Inputs[SQL Server Destination Input].ExternalColumns[req_id]"
+                      lineageId="Package\Import from Excel to SQL Server\Excel Source.Outputs[Excel Source Output].Columns[Job ID]" />
+                    <inputColumn
+                      refId="Package\Import from Excel to SQL Server\SQL Server Destination.Inputs[SQL Server Destination Input].Columns[Job]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="Job"
+                      externalMetadataColumnId="Package\Import from Excel to SQL Server\SQL Server Destination.Inputs[SQL Server Destination Input].ExternalColumns[job_title]"
+                      lineageId="Package\Import from Excel to SQL Server\Excel Source.Outputs[Excel Source Output].Columns[Job]" />
+                    <inputColumn
+                      refId="Package\Import from Excel to SQL Server\SQL Server Destination.Inputs[SQL Server Destination Input].Columns[Location]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="Location"
+                      externalMetadataColumnId="Package\Import from Excel to SQL Server\SQL Server Destination.Inputs[SQL Server Destination Input].ExternalColumns[location]"
+                      lineageId="Package\Import from Excel to SQL Server\Excel Source.Outputs[Excel Source Output].Columns[Location]" />
+                    <inputColumn
+                      refId="Package\Import from Excel to SQL Server\SQL Server Destination.Inputs[SQL Server Destination Input].Columns[Remote]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="Remote"
+                      externalMetadataColumnId="Package\Import from Excel to SQL Server\SQL Server Destination.Inputs[SQL Server Destination Input].ExternalColumns[remote]"
+                      lineageId="Package\Import from Excel to SQL Server\Excel Source.Outputs[Excel Source Output].Columns[Remote]" />
+                    <inputColumn
+                      refId="Package\Import from Excel to SQL Server\SQL Server Destination.Inputs[SQL Server Destination Input].Columns[Applicant]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="Applicant"
+                      externalMetadataColumnId="Package\Import from Excel to SQL Server\SQL Server Destination.Inputs[SQL Server Destination Input].ExternalColumns[applicant_name]"
+                      lineageId="Package\Import from Excel to SQL Server\Excel Source.Outputs[Excel Source Output].Columns[Applicant]" />
+                    <inputColumn
+                      refId="Package\Import from Excel to SQL Server\SQL Server Destination.Inputs[SQL Server Destination Input].Columns[Copy of Status Date]"
+                      cachedDataType="dbTimeStamp"
+                      cachedName="Copy of Status Date"
+                      externalMetadataColumnId="Package\Import from Excel to SQL Server\SQL Server Destination.Inputs[SQL Server Destination Input].ExternalColumns[status_date]"
+                      lineageId="Package\Import from Excel to SQL Server\Data Conversion.Outputs[Data Conversion Output].Columns[Copy of Status Date]" />
+                    <inputColumn
+                      refId="Package\Import from Excel to SQL Server\SQL Server Destination.Inputs[SQL Server Destination Input].Columns[Copy of Date Applied]"
+                      cachedDataType="dbTimeStamp"
+                      cachedName="Copy of Date Applied"
+                      externalMetadataColumnId="Package\Import from Excel to SQL Server\SQL Server Destination.Inputs[SQL Server Destination Input].ExternalColumns[date_applied]"
+                      lineageId="Package\Import from Excel to SQL Server\Data Conversion.Outputs[Data Conversion Output].Columns[Copy of Date Applied]" />
+                    <inputColumn
+                      refId="Package\Import from Excel to SQL Server\SQL Server Destination.Inputs[SQL Server Destination Input].Columns[Company ]"
+                      cachedDataType="wstr"
+                      cachedLength="255"
+                      cachedName="Company "
+                      externalMetadataColumnId="Package\Import from Excel to SQL Server\SQL Server Destination.Inputs[SQL Server Destination Input].ExternalColumns[company]"
+                      lineageId="Package\Import from Excel to SQL Server\Excel Source.Outputs[Excel Source Output].Columns[Company ]" />
+                  </inputColumns>
+                  <externalMetadataColumns
+                    isUsed="True">
+                    <externalMetadataColumn
+                      refId="Package\Import from Excel to SQL Server\SQL Server Destination.Inputs[SQL Server Destination Input].ExternalColumns[Source]"
+                      dataType="wstr"
+                      length="255"
+                      name="Source" />
+                    <externalMetadataColumn
+                      refId="Package\Import from Excel to SQL Server\SQL Server Destination.Inputs[SQL Server Destination Input].ExternalColumns[Status]"
+                      dataType="wstr"
+                      length="255"
+                      name="Status" />
+                    <externalMetadataColumn
+                      refId="Package\Import from Excel to SQL Server\SQL Server Destination.Inputs[SQL Server Destination Input].ExternalColumns[staging_id]"
+                      dataType="i4"
+                      name="staging_id" />
+                    <externalMetadataColumn
+                      refId="Package\Import from Excel to SQL Server\SQL Server Destination.Inputs[SQL Server Destination Input].ExternalColumns[company]"
+                      dataType="wstr"
+                      length="255"
+                      name="company" />
+                    <externalMetadataColumn
+                      refId="Package\Import from Excel to SQL Server\SQL Server Destination.Inputs[SQL Server Destination Input].ExternalColumns[date_applied]"
+                      dataType="dbTimeStamp"
+                      name="date_applied" />
+                    <externalMetadataColumn
+                      refId="Package\Import from Excel to SQL Server\SQL Server Destination.Inputs[SQL Server Destination Input].ExternalColumns[latest_step]"
+                      dataType="wstr"
+                      length="255"
+                      name="latest_step" />
+                    <externalMetadataColumn
+                      refId="Package\Import from Excel to SQL Server\SQL Server Destination.Inputs[SQL Server Destination Input].ExternalColumns[status_date]"
+                      dataType="dbTimeStamp"
+                      name="status_date" />
+                    <externalMetadataColumn
+                      refId="Package\Import from Excel to SQL Server\SQL Server Destination.Inputs[SQL Server Destination Input].ExternalColumns[req_id]"
+                      dataType="wstr"
+                      length="255"
+                      name="req_id" />
+                    <externalMetadataColumn
+                      refId="Package\Import from Excel to SQL Server\SQL Server Destination.Inputs[SQL Server Destination Input].ExternalColumns[job_title]"
+                      dataType="wstr"
+                      length="255"
+                      name="job_title" />
+                    <externalMetadataColumn
+                      refId="Package\Import from Excel to SQL Server\SQL Server Destination.Inputs[SQL Server Destination Input].ExternalColumns[location]"
+                      dataType="wstr"
+                      length="255"
+                      name="location" />
+                    <externalMetadataColumn
+                      refId="Package\Import from Excel to SQL Server\SQL Server Destination.Inputs[SQL Server Destination Input].ExternalColumns[remote]"
+                      dataType="wstr"
+                      length="255"
+                      name="remote" />
+                    <externalMetadataColumn
+                      refId="Package\Import from Excel to SQL Server\SQL Server Destination.Inputs[SQL Server Destination Input].ExternalColumns[applicant_name]"
+                      dataType="wstr"
+                      length="255"
+                      name="applicant_name" />
+                  </externalMetadataColumns>
+                </input>
+              </inputs>
+            </component>
+          </components>
+          <paths>
+            <path
+              refId="Package\Import from Excel to SQL Server.Paths[Data Conversion Output]"
+              endId="Package\Import from Excel to SQL Server\SQL Server Destination.Inputs[SQL Server Destination Input]"
+              name="Data Conversion Output"
+              startId="Package\Import from Excel to SQL Server\Data Conversion.Outputs[Data Conversion Output]" />
+            <path
+              refId="Package\Import from Excel to SQL Server.Paths[Excel Source Output]"
+              endId="Package\Import from Excel to SQL Server\Data Conversion.Inputs[Data Conversion Input]"
+              name="Excel Source Output"
+              startId="Package\Import from Excel to SQL Server\Excel Source.Outputs[Excel Source Output]" />
+          </paths>
+        </pipeline>
+      </DTS:ObjectData>
+    </DTS:Executable>
+  </DTS:Executables>
+  <DTS:PrecedenceConstraints>
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[Constraint]"
+      DTS:CreationName=""
+      DTS:DTSID="{B9541104-6CEB-421C-A7DA-6B75487224B4}"
+      DTS:From="Package\Build Staging Table"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="Constraint"
+      DTS:To="Package\Import from Excel to SQL Server" />
+  </DTS:PrecedenceConstraints>
+  <DTS:DesignTimeProperties><![CDATA[<?xml version="1.0"?>
+<!--This CDATA section contains the layout information of the package. The section includes information such as (x,y) coordinates, width, and height.-->
+<!--If you manually edit this section and make a mistake, you can delete it. -->
+<!--The package will still be able to load normally but the previous layout information will be lost and the designer will automatically re-arrange the elements on the design surface.-->
+<Objects
+  Version="8">
+  <!--Each node below will contain properties that do not affect runtime behavior.-->
+  <Package
+    design-time-name="Package">
+    <LayoutInfo>
+      <GraphLayout
+        Capacity="4" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml">
+        <NodeLayout
+          Size="228,41.6"
+          Id="Package\Import from Excel to SQL Server"
+          TopLeft="403.333317306307,219.266668409242" />
+        <NodeLayout
+          Size="164.8,41.6"
+          Id="Package\Build Staging Table"
+          TopLeft="439.999982515972,118.733334276941" />
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint]"
+          TopLeft="519.866649911139,160.333334276941">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,58.9333341323008"
+              Start="0,0"
+              End="0,51.4333341323008">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,51.4333341323008" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+      </GraphLayout>
+    </LayoutInfo>
+  </Package>
+  <TaskHost
+    design-time-name="Package\Import from Excel to SQL Server">
+    <LayoutInfo>
+      <GraphLayout
+        Capacity="8" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml">
+        <NodeLayout
+          Size="187.2,41.6"
+          Id="Package\Import from Excel to SQL Server\SQL Server Destination"
+          TopLeft="687.499972681206,244.400001942317" />
+        <NodeLayout
+          Size="140,41.6"
+          Id="Package\Import from Excel to SQL Server\Excel Source"
+          TopLeft="408.333317107625,143.000001136462" />
+        <NodeLayout
+          Size="156,41.6"
+          Id="Package\Import from Excel to SQL Server\Data Conversion"
+          TopLeft="698.333305584061,139.533334442245" />
+        <EdgeLayout
+          Id="Package\Import from Excel to SQL Server.Paths[Excel Source Output]"
+          TopLeft="548.333317107625,162.066667789353">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="149.999988476436,0"
+              Start="0,0"
+              End="142.499988476436,0">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="142.499988476436,0" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package\Import from Excel to SQL Server.Paths[Data Conversion Output]"
+          TopLeft="778.716639132633,181.133334442245">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,63.2666675000722"
+              Start="0,0"
+              End="0,55.7666675000722">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,55.7666675000722" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+      </GraphLayout>
+    </LayoutInfo>
+  </TaskHost>
+  <PipelineComponentMetadata
+    design-time-name="Package\Import from Excel to SQL Server\SQL Server Destination">
+    <Properties>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
+  <PipelineComponentMetadata
+    design-time-name="Package\Import from Excel to SQL Server\Excel Source">
+    <Properties>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+      <Property>
+        <Name>TableInfoObjectType</Name>
+        <Value
+          type="q2:string">Table</Value>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
+</Objects>]]></DTS:DesignTimeProperties>
+</DTS:Executable>
